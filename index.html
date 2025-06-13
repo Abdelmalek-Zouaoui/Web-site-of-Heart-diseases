@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Data Analysis - Interactive Learning Hub</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-heartbeat"></i> Heart Disease Analytics</h2>
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            <div class="nav-item active" onclick="showSection('introduction')" id="nav-introduction">
+                <i class="fas fa-play-circle"></i> Introduction
+            </div>
+            <div class="nav-item" onclick="showSection('exploration')" id="nav-exploration">
+                <i class="fas fa-search"></i> Data Exploration
+            </div>
+            <div class="nav-item" onclick="showSection('visualization')" id="nav-visualization">
+                <i class="fas fa-chart-bar"></i> Data Visualization
+            </div>
+            <div class="nav-item" onclick="showSection('preprocessing')" id="nav-preprocessing">
+                <i class="fas fa-cogs"></i> Data Preprocessing
+            </div>
+            <div class="nav-item" onclick="showSection('interactive')" id="nav-interactive">
+                <i class="fas fa-code"></i> Interactive Examples
+            </div>
+            <div class="nav-item" onclick="showSection('summary')" id="nav-summary">
+                <i class="fas fa-flag-checkered"></i> Summary & Next Steps
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- Introduction Section -->
+            <section id="introduction" class="section active">
+                <div class="section-header">
+                    <h1>Heart Disease Data Analysis</h1>
+                    <p>Learn data science through real-world health analytics</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h2><i class="fas fa-bullseye"></i> Learning Objectives</h2>
+                    <p>By the end of this tutorial, you'll understand how to analyze medical datasets, create meaningful visualizations, and prepare data for machine learning models. We'll use Python's powerful data science libraries to explore the UCI Heart Disease dataset.</p>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-database"></i> About the UCI Heart Disease Dataset</h2>
+                    <p>The UCI Heart Disease dataset is a classic benchmark dataset used in medical data analysis and machine learning research. This database contains 76 attributes, but all published experiments refer to using a subset of 14 of them, with the dataset consisting of 303 patients with 14 features set. </p>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number">303</span>
+                            <span class="stat-label">Patient Records</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">14</span>
+                            <span class="stat-label">Features</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">1</span>
+                            <span class="stat-label">Target Variable</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">76</span>
+                            <span class="stat-label">Original Attributes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-target"></i> Our Analysis Goal</h3>
+                    <p>Our primary objective is to explore and analyze this dataset to understand the key factors that contribute to heart disease diagnosis. We'll investigate relationships between different medical measurements and identify patterns that could help in early detection and prevention strategies.</p>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card" data-aos="fade-up">
+                        <h3><i class="fas fa-user"></i> Patient Demographics</h3>
+                        <p>Age, sex, and basic patient information that forms the foundation of medical analysis.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                        <h3><i class="fas fa-heartbeat"></i> Cardiac Measurements</h3>
+                        <p>Heart rate, blood pressure, and ECG results that indicate heart function.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                        <h3><i class="fas fa-flask"></i> Laboratory Results</h3>
+                        <p>Cholesterol levels, blood sugar, and other biochemical markers.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                        <h3><i class="fas fa-stethoscope"></i> Clinical Symptoms</h3>
+                        <p>Chest pain type, exercise-induced symptoms, and diagnostic indicators.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Exploration Section -->
+            <section id="exploration" class="section">
+                <div class="section-header">
+                    <h1>Data Exploration</h1>
+                    <p>Understanding the structure and characteristics of our dataset</p>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-download"></i> Loading the Data</h2>
+                    <p>We'll start by importing the necessary libraries and loading our heart disease dataset using pandas.</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Python - Data Loading</span>
+                            <button class="copy-btn" onclick="copyCode('code1')">Copy Code</button>
+                        </div>
+                        <pre><code id="code1" class="language-python">import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
+import plotly.express as px
+import plotly.graph_objects as go
+
+# Load the heart disease dataset
+df = pd.read_csv('heart_disease.csv')
+
+# Display basic information about the dataset
+print("Dataset Shape:", df.shape)
+print("\nFirst 7 rows:")
+print(df.head(7))</code></pre>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-table"></i> Sample Data Preview</h2>
+                    <p>Here's what the first 7 rows of our dataset look like:</p>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>age</th>
+                                    <th>sex</th>
+                                    <th>cp</th>
+                                    <th>trestbps</th>
+                                    <th>chol</th>
+                                    <th>fbs</th>
+                                    <th>target</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>63</td>
+                                    <td>1</td>
+                                    <td>3</td>
+                                    <td>145</td>
+                                    <td>233</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>37</td>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>130</td>
+                                    <td>250</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>41</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                    <td>130</td>
+                                    <td>204</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card" data-aos="fade-right">
+                        <h3><span class="tooltip">age<span class="tooltiptext">Age of the patient in years</span></span></h3>
+                        <p>Patient age ranging from 29 to 77 years</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-right" data-aos-delay="100">
+                        <h3><span class="tooltip">sex<span class="tooltiptext">1 = male, 0 = female</span></span></h3>
+                        <p>Patient gender (binary encoded)</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-right" data-aos-delay="200">
+                        <h3><span class="tooltip">cp<span class="tooltiptext">Chest pain type: 0=asymptomatic, 1=atypical angina, 2=non-anginal pain, 3=typical angina</span></span></h3>
+                        <p>Type of chest pain experienced</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-right" data-aos-delay="300">
+                        <h3><span class="tooltip">trestbps<span class="tooltiptext">Resting blood pressure in mm Hg</span></span></h3>
+                        <p>Resting blood pressure measurement</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-right" data-aos-delay="400">
+                        <h3><span class="tooltip">chol<span class="tooltiptext">Serum cholesterol in mg/dl</span></span></h3>
+                        <p>Cholesterol level in blood</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-right" data-aos-delay="500">
+                        <h3><span class="tooltip">target<span class="tooltiptext">1 = heart disease present, 0 = no heart disease</span></span></h3>
+                        <p>Heart disease diagnosis (our target variable)</p>
+                    </div>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Python - Dataset Statistics</span>
+                        <button class="copy-btn" onclick="copyCode('code2')">Copy Code</button>
+                    </div>
+                    <pre><code id="code2" class="language-python"># Get detailed information about the dataset
+print("Dataset Info:")
+print(df.info())
+
+print("\nStatistical Summary:")
+print(df.describe())
+
+# Check for missing values
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+# Check for duplicates
+print(f"\nDuplicate Rows: {df.duplicated().sum()}")
+
+# Check data types
+print("\nData Types:")
+print(df.dtypes)</code></pre>
+                </div>
+            </section>
+
+            <!-- Data Visualization Section -->
+            <section id="visualization" class="section">
+                <div class="section-header">
+                    <h1>Data Visualization</h1>
+                    <p>Creating meaningful visualizations to understand patterns and relationships</p>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-chart-histogram"></i> Distribution Analysis</h2>
+                    <p>Understanding how our numeric features are distributed helps identify patterns and potential outliers.</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Python - Distribution Plots</span>
+                            <button class="copy-btn" onclick="copyCode('code3')">Copy Code</button>
+                        </div>
+                        <pre><code id="code3" class="language-python"># Create histograms for numeric features
+numeric_features = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
+
+plt.figure(figsize=(15, 10))
+for i, feature in enumerate(numeric_features, 1):
+    plt.subplot(2, 3, i)
+    plt.hist(df[feature], bins=20, alpha=0.7, color='skyblue', edgecolor='black')
+    plt.title(f'Distribution of {feature}')
+    plt.xlabel(feature)
+    plt.ylabel('Frequency')
+    plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                    </div>
+                </div>
+
+                <div class="chart-container" data-aos="zoom-in">
+                    <h3><i class="fas fa-chart-area"></i> Interactive Age Distribution</h3>
+                    <div id="ageDistribution" style="height: 400px;"></div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-fire"></i> Correlation Heatmap</h2>
+                    <p>A correlation heatmap reveals relationships between different variables, helping us identify which features might be most important for heart disease prediction.</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Python - Correlation Analysis</span>
+                            <button class="copy-btn" onclick="copyCode('code4')">Copy Code</button>
+                        </div>
+                        <pre><code id="code4" class="language-python"># Calculate correlation matrix
+correlation_matrix = df.corr()
+
+# Create heatmap
+plt.figure(figsize=(12, 10))
+sns.heatmap(correlation_matrix, 
+            annot=True, 
+            cmap='RdYlBu_r', 
+            center=0,
+            square=True,
+            fmt='.2f')
+plt.title('Correlation Matrix of Heart Disease Features')
+plt.tight_layout()
+plt.show()
+
+# Identify strong correlations with target variable
+target_correlations = correlation_matrix['target'].abs().sort_values(ascending=False)
+print("Features most correlated with heart disease:")
+print(target_correlations[1:6])  # Exclude target itself</code></pre>
+                    </div>
+                </div>
+
+                <div class="chart-container" data-aos="zoom-in">
+                    <h3><i class="fas fa-th"></i> Interactive Correlation Heatmap</h3>
+                    <div id="correlationHeatmap" style="height: 500px;"></div>
+                </div>
+
+                <div class="highlight-box">
+                    <h3><i class="fas fa-lightbulb"></i> Key Insights from Visualizations</h3>
+                    <ul class="insight-list">
+                        <li data-aos="fade-right" data-aos-delay="100"><strong>Age Distribution:</strong> Most patients are between 50-65 years old</li>
+                        <li data-aos="fade-right" data-aos-delay="200"><strong>Chest Pain Type:</strong> Shows significant correlation with heart disease</li>
+                        <li data-aos="fade-right" data-aos-delay="300"><strong>Maximum Heart Rate:</strong> Higher rates often indicate better heart health</li>
+                        <li data-aos="fade-right" data-aos-delay="400"><strong>Exercise Angina:</strong> Strong predictor of heart disease presence</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Data Preprocessing Section -->
+            <section id="preprocessing" class="section">
+                <div class="section-header">
+                    <h1>Data Preprocessing</h1>
+                    <p>Preparing our data for analysis and machine learning</p>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-tags"></i> Handling Categorical Variables</h2>
+                    <p>Most machine learning algorithms work with numeric data, so we need to convert categorical variables into numeric format using techniques like Label Encoding.</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Python - Label Encoding</span>
+                            <button class="copy-btn" onclick="copyCode('code5')">Copy Code</button>
+                        </div>
+                        <pre><code id="code5" class="language-python"># Identify categorical columns
+categorical_columns = ['sex', 'cp', 'fbs', 'restecg', 'exang', 'slope', 'ca', 'thal']
+
+# Create a copy of the dataframe for preprocessing
+df_processed = df.copy()
+
+# Apply Label Encoding to categorical variables
+label_encoders = {}
+for column in categorical_columns:
+    le = LabelEncoder()
+    df_processed[column] = le.fit_transform(df_processed[column])
+    label_encoders[column] = le
+    
+    print(f"{column}: {dict(zip(le.classes_, le.transform(le.classes_)))}")
+
+print("\nProcessed dataset shape:", df_processed.shape)
+print("First 5 rows after encoding:")
+print(df_processed.head())</code></pre>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-exclamation-triangle"></i> Common Preprocessing Pitfalls</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card pitfall-card" data-aos="flip-up">
+                            <h3><i class="fas fa-bug"></i> Data Leakage</h3>
+                            <p>Accidentally including future information or target-related data in features. Always ensure temporal consistency in your features.</p>
+                        </div>
+                        <div class="feature-card pitfall-card" data-aos="flip-up" data-aos-delay="100">
+                            <h3><i class="fas fa-balance-scale"></i> Scaling Issues</h3>
+                            <p>Features with different scales can bias algorithms. Consider standardization or normalization for distance-based algorithms.</p>
+                        </div>
+                        <div class="feature-card pitfall-card" data-aos="flip-up" data-aos-delay="200">
+                            <h3><i class="fas fa-random"></i> Train-Test Contamination</h3>
+                            <p>Fitting encoders on entire dataset before splitting. Always fit preprocessing on training data only.</p>
+                        </div>
+                        <div class="feature-card pitfall-card" data-aos="flip-up" data-aos-delay="300">
+                            <h3><i class="fas fa-question-circle"></i> Missing Value Handling</h3>
+                            <p>Inappropriate imputation strategies can introduce bias. Consider the mechanism behind missing data before choosing imputation methods.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Python - Feature Engineering</span>
+                        <button class="copy-btn" onclick="copyCode('code6')">Copy Code</button>
+                    </div>
+                    <pre><code id="code6" class="language-python"># Create some derived features
+df_processed['age_group'] = pd.cut(df_processed['age'], 
+                                 bins=[0, 40, 50, 60, 100], 
+                                 labels=['Young', 'Middle', 'Senior', 'Elderly'])
+
+df_processed['bp_category'] = pd.cut(df_processed['trestbps'], 
+                                   bins=[0, 120, 140, 200], 
+                                   labels=['Normal', 'Elevated', 'High'])
+
+df_processed['chol_risk'] = df_processed['chol'].apply(
+   lambda x: 'High' if x > 240 else 'Moderate' if x > 200 else 'Normal'
+)
+
+# Separate features and target
+X = df_processed.drop(['target', 'age_group', 'bp_category', 'chol_risk'], axis=1)
+y = df_processed['target']
+
+print("Features shape:", X.shape)
+print("Target distribution:")
+print(y.value_counts())</code></pre>
+                </div>
+
+                <div class="highlight-box">
+                    <h3><i class="fas fa-check-circle"></i> Preprocessing Best Practices</h3>
+                    <ul class="best-practices-list">
+                        <li data-aos="fade-left" data-aos-delay="100"><strong>Document Transformations:</strong> Keep track of all preprocessing steps for reproducibility</li>
+                        <li data-aos="fade-left" data-aos-delay="200"><strong>Validate Distributions:</strong> Check if transformations maintain meaningful data relationships</li>
+                        <li data-aos="fade-left" data-aos-delay="300"><strong>Handle Outliers Carefully:</strong> Medical data outliers might be clinically significant</li>
+                        <li data-aos="fade-left" data-aos-delay="400"><strong>Preserve Interpretability:</strong> Maintain feature meanings for clinical understanding</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Interactive Examples Section -->
+            <section id="interactive" class="section">
+                <div class="section-header">
+                    <h1>Interactive Code Examples</h1>
+                    <p>Hands-on exploration with customizable parameters</p>
+                </div>
+
+                <div class="interactive-demo" data-aos="fade-up">
+                    <h3><i class="fas fa-sliders-h"></i> Interactive Data Explorer</h3>
+                    <p>Adjust the parameters below to explore different aspects of the heart disease dataset.</p>
+                    
+                    <div class="demo-controls">
+                        <div class="control-group">
+                            <label for="feature-select">Select Feature:</label>
+                            <select id="feature-select" onchange="updateChart()">
+                                <option value="age">Age</option>
+                                <option value="trestbps">Resting Blood Pressure</option>
+                                <option value="chol">Cholesterol</option>
+                                <option value="thalach">Max Heart Rate</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="chart-type">Chart Type:</label>
+                            <select id="chart-type" onchange="updateChart()">
+                                <option value="histogram">Histogram</option>
+                                <option value="box">Box Plot</option>
+                                <option value="violin">Violin Plot</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="bins-slider">Bins (for histogram): <span id="bins-value">20</span></label>
+                            <input type="range" id="bins-slider" min="10" max="50" value="20" oninput="updateBinsValue(); updateChart();">
+                        </div>
+                    </div>
+                    
+                    <div id="interactiveChart" style="height: 400px;"></div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-code-branch"></i> Runnable Code Snippets</h2>
+                    <p>Copy and modify these code examples to explore the data further:</p>
+                    
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Python - Advanced Visualization</span>
+                            <button class="copy-btn" onclick="copyCode('code7')">Copy Code</button>
+                        </div>
+                        <pre><code id="code7" class="language-python"># Create a comprehensive analysis function
+def analyze_feature(feature_name, target_col='target'):
+   """
+   Comprehensive analysis of a single feature
+   """
+   fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+   
+   # Distribution by target
+   for target_val in df[target_col].unique():
+       subset = df[df[target_col] == target_val]
+       axes[0, 0].hist(subset[feature_name], alpha=0.6, 
+                      label=f'Target={target_val}', bins=20)
+   axes[0, 0].set_title(f'{feature_name} Distribution by Target')
+   axes[0, 0].legend()
+   
+   # Box plot by target
+   df.boxplot(column=feature_name, by=target_col, ax=axes[0, 1])
+   axes[0, 1].set_title(f'{feature_name} Box Plot by Target')
+   
+   # Correlation with other features
+   correlations = df.corr()[feature_name].sort_values(key=abs, ascending=False)[1:6]
+   axes[1, 0].barh(range(len(correlations)), correlations.values)
+   axes[1, 0].set_yticks(range(len(correlations)))
+   axes[1, 0].set_yticklabels(correlations.index)
+   axes[1, 0].set_title(f'Top Correlations with {feature_name}')
+   
+   # Statistical summary
+   summary_stats = df.groupby(target_col)[feature_name].describe()
+   axes[1, 1].axis('tight')
+   axes[1, 1].axis('off')
+   table = axes[1, 1].table(cellText=summary_stats.round(2).values,
+                          rowLabels=summary_stats.index,
+                          colLabels=summary_stats.columns,
+                          cellLoc='center',
+                          loc='center')
+   axes[1, 1].set_title(f'{feature_name} Statistics by Target')
+   
+   plt.tight_layout()
+   plt.show()
+
+# Example usage
+analyze_feature('age')
+analyze_feature('chol')</code></pre>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-download"></i> Download Resources</h2>
+                    <p>Get the complete code and datasets to continue your learning:</p>
+                    
+                    <div class="download-buttons">
+                        <button class="download-btn" onclick="downloadNotebook()">
+                            <i class="fas fa-file-code"></i> Download Jupyter Notebook
+                        </button>
+                        <button class="download-btn" onclick="downloadDataset()">
+                            <i class="fas fa-database"></i> Download Dataset
+                        </button>
+                        <button class="download-btn" onclick="downloadCheatsheet()">
+                            <i class="fas fa-file-alt"></i> Download Cheat Sheet
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary Section -->
+            <section id="summary" class="section">
+                <div class="section-header">
+                    <h1>Summary & Next Steps</h1>
+                    <p>Recap of what we've learned and where to go from here</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h2><i class="fas fa-graduation-cap"></i> What We've Accomplished</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card" data-aos="zoom-in">
+                            <span class="stat-number"><i class="fas fa-check-circle"></i></span>
+                            <span class="stat-label">Dataset Exploration</span>
+                        </div>
+                        <div class="stat-card" data-aos="zoom-in" data-aos-delay="100">
+                            <span class="stat-number"><i class="fas fa-chart-line"></i></span>
+                            <span class="stat-label">Data Visualization</span>
+                        </div>
+                        <div class="stat-card" data-aos="zoom-in" data-aos-delay="200">
+                            <span class="stat-number"><i class="fas fa-cogs"></i></span>
+                            <span class="stat-label">Data Preprocessing</span>
+                        </div>
+                        <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
+                            <span class="stat-number"><i class="fas fa-code"></i></span>
+                            <span class="stat-label">Interactive Analysis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-key"></i> Key Findings from Our Analysis</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card finding-card" data-aos="fade-up">
+                            <h3><i class="fas fa-heartbeat"></i> Chest Pain Type</h3>
+                            <p>Asymptotic chest pain shows the strongest correlation with heart disease presence, indicating its importance as a diagnostic indicator.</p>
+                        </div>
+                        <div class="feature-card finding-card" data-aos="fade-up" data-aos-delay="100">
+                            <h3><i class="fas fa-running"></i> Exercise Response</h3>
+                            <p>Exercise-induced angina and ST depression during exercise are significant predictors of heart disease.</p>
+                        </div>
+                        <div class="feature-card finding-card" data-aos="fade-up" data-aos-delay="200">
+                            <h3><i class="fas fa-tachometer-alt"></i> Heart Rate</h3>
+                            <p>Maximum heart rate achieved during exercise testing shows negative correlation with heart disease risk.</p>
+                        </div>
+                        <div class="feature-card finding-card" data-aos="fade-up" data-aos-delay="300">
+                            <h3><i class="fas fa-user"></i> Demographics</h3>
+                            <p>Age and gender play important roles, with middle-aged males showing higher risk profiles in our dataset.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <h3><i class="fas fa-rocket"></i> Recommended Next Steps</h3>
+                    <ul class="next-steps-list">
+                        <li data-aos="fade-right" data-aos-delay="100"><strong>Machine Learning Models:</strong> Build predictive models using algorithms like Random Forest, SVM, or Neural Networks</li>
+                        <li data-aos="fade-right" data-aos-delay="200"><strong>Feature Engineering:</strong> Create more sophisticated features combining multiple variables</li>
+                        <li data-aos="fade-right" data-aos-delay="300"><strong>Cross-Validation:</strong> Implement robust model validation techniques to ensure generalizability</li>
+                        <li data-aos="fade-right" data-aos-delay="400"><strong>Model Interpretation:</strong> Use SHAP or LIME to understand model predictions</li>
+                        <li data-aos="fade-right" data-aos-delay="500"><strong>Clinical Validation:</strong> Collaborate with medical professionals to validate findings</li>
+                        <li data-aos="fade-right" data-aos-delay="600"><strong>Advanced Analytics:</strong> Explore survival analysis or time-series modeling for longitudinal data</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-books"></i> Additional Learning Resources</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card resource-card" data-aos="flip-left">
+                            <h3><i class="fas fa-book"></i> Advanced Topics</h3>
+                            <ul>
+                                <li>• Medical Data Ethics and Privacy</li>
+                                <li>• Handling Imbalanced Datasets</li>
+                                <li>• Time Series Analysis in Healthcare</li>
+                                <li>• Deep Learning for Medical Imaging</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card resource-card" data-aos="flip-left" data-aos-delay="100">
+                            <h3><i class="fas fa-tools"></i> Tools & Libraries</h3>
+                            <ul>
+                                <li>• Scikit-learn for Machine Learning</li>
+                                <li>• TensorFlow/PyTorch for Deep Learning</li>
+                                <li>• SHAP for Model Interpretability</li>
+                                <li>• Plotly for Interactive Visualizations</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card resource-card" data-aos="flip-left" data-aos-delay="200">
+                            <h3><i class="fas fa-database"></i> Similar Datasets</h3>
+                            <ul>
+                                <li>• Diabetes Dataset</li>
+                                <li>• Breast Cancer Wisconsin Dataset</li>
+                                <li>• Stroke Prediction Dataset</li>
+                                <li>• Mental Health Survey Data</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card resource-card" data-aos="flip-left" data-aos-delay="300">
+                            <h3><i class="fas fa-certificate"></i> Certifications</h3>
+                            <ul>
+                                <li>• Google Data Analytics Certificate</li>
+                                <li>• IBM Data Science Professional</li>
+                                <li>• Microsoft Azure AI Fundamentals</li>
+                                <li>• Coursera Machine Learning Course</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h3><i class="fas fa-lightbulb"></i> Final Thoughts</h3>
+                    <p>Data science in healthcare requires a unique blend of technical skills and domain knowledge. Always remember that behind every data point is a real person, and our analyses should ultimately contribute to better health outcomes. Continue practicing with different datasets, collaborate with healthcare professionals, and stay updated with the latest research in medical data science.</p>
+                    
+                    <p class="final-message" data-aos="zoom-in"><strong>Happy analyzing, and may your insights contribute to better health for all! 🏥📊❤️</strong></p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
